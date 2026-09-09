@@ -1,0 +1,61 @@
+THIRD-PARTY LICENSES
+====================
+
+This sample does not vendor or bundle third-party source code. No dependency is
+copied into this repository. Everything listed below is fetched at install time by
+pip from the Python Package Index, using the constraints declared in
+requirements.txt.
+
+The sample's own code is licensed under MIT-0. See LICENSE.
+
+Versions shown are the constraint declared by this repository, followed by the
+version the licenses below were verified against.
+
+
+Python runtime dependencies (requirements.txt)
+----------------------------------------------
+
+boto3
+  Constraint : >=1.35.0  (verified against 1.43.76)
+  License    : Apache-2.0
+  Project URL: https://github.com/boto/boto3
+  Purpose    : AWS SDK for Python. Used for the s3vectors and bedrock-runtime
+               clients.
+
+python-dotenv
+  Constraint : >=1.0.0  (verified against 1.2.3)
+  License    : BSD-3-Clause
+  Project URL: https://github.com/theskumar/python-dotenv
+  Purpose    : Loads configuration from a local .env file in config.py.
+
+streamlit
+  Constraint : >=1.38.0  (verified against 1.62.0)
+  License    : Apache-2.0
+  Project URL: https://github.com/streamlit/streamlit
+  Purpose    : Serves the optional web UI in app.py. The command line entry
+               points do not import it.
+
+
+Python test dependencies (requirements.txt)
+-------------------------------------------
+
+pytest
+  Constraint : >=8.0.0  (verified against 9.1.1)
+  License    : MIT
+  Project URL: https://github.com/pytest-dev/pytest
+  Purpose    : Test runner.
+
+hypothesis
+  Constraint : >=6.100.0  (verified against 6.165.10)
+  License    : MPL-2.0
+  Project URL: https://github.com/HypothesisWorks/hypothesis
+  Purpose    : Property-based testing.
+
+
+AWS services
+------------
+
+Amazon S3 Vectors and Amazon Bedrock are AWS services called over the network by
+this sample. They are not redistributed with it and carry no third-party license
+obligation here. Their use is governed by the AWS Customer Agreement and the AWS
+Service Terms.

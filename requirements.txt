@@ -1,0 +1,8 @@
+# Runtime dependencies
+boto3>=1.35.0          # AWS SDK: Bedrock Runtime + S3 Vectors
+python-dotenv>=1.0.0   # Load configuration from a local .env file
+streamlit>=1.38.0      # Optional web UI (app.py)
+
+# Development / test dependencies
+pytest>=8.0.0          # Test runner
+hypothesis>=6.100.0    # Property-based testing
