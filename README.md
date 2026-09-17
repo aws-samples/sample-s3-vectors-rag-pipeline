@@ -10,13 +10,13 @@ production environments. See [CONTRIBUTING](CONTRIBUTING.md) for more informatio
 ## Why S3 Vectors?
 
 Amazon S3 Vectors is a bucket type purpose-built for storing and querying vector embeddings. Note
-that it is not a setting you enable on an existing general purpose bucket. A vector bucket is a
+that it is not a setting you enable on an existing S3 general purpose bucket. A vector bucket is a
 separate resource with its own API namespace and boto3 client (`s3vectors`), created specifically for
 semantic similarity search. It holds one or more vector indexes, each a searchable collection of
 vectors that share the same dimension and distance metric.
 
-Traditional RAG architectures include a separate vector store, whether that is a provisioned cluster,
-a hosted third-party service, or a serverless index that bills a capacity minimum. Each one is
+Traditional RAG architectures generally include a separate vector store, whether that is a provisioned cluster,
+a hosted third-party service, or a serverless index that often carries a capacity or usage minimum. Each one is
 another system to size, secure, and pay for. S3 Vectors builds that layer within the familiar
 architecture of Amazon S3, providing the same elasticity, durability, and availability as general
 purpose buckets while
@@ -39,34 +39,31 @@ Key characteristics:
 
 ### When another vector store fits better
 
-S3 Vectors is tuned for low cost at scale with subsecond queries, not for the lowest possible
+S3 Vectors is tuned for low cost at scale with sub-second queries, not for the lowest possible
 latency. Applications that require
 single-digit millisecond latency at high QPS, hybrid keyword-plus-vector search, or vectors next to
 operational records are generally better served by other solutions, such as
 [Amazon DynamoDB](https://aws.amazon.com/blogs/aws/amazon-dynamodb-now-supports-real-time-vector-search-at-any-scale/),
-Amazon OpenSearch Service, or Amazon Aurora with pgvector.
+[Amazon OpenSearch Service](https://aws.amazon.com/opensearch-service/serverless-vector-database/), or [Amazon Aurora with pgvector](https://aws.amazon.com/blogs/database/running-pgvector-in-production-on-amazon-aurora-postgresql/).
 
 ## Architecture
 
 ![Amazon S3 Vectors RAG pipeline architecture](architecture.svg)
 
-The application code is the orchestrator. In this sample it makes each call itself, embedding,
+In this sample the application code is the orchestrator and makes each call itself, embedding,
 retrieving, and generating in turn and getting a result back at each step. The application is
 `ingest.py` for ingestion and `query.py` or `app.py` for queries. There are two flows, run at
 different times. Ingestion (green) loads documents into the index and is re-run whenever documents
 change, while query (blue) is what the end user does. In the diagram a solid line is a request and a
 dashed line is the response.
 
-Both flows go through the same index and the same embedding model, Amazon Titan Text Embeddings v2,
-because a similarity comparison only means something when the query and the documents were embedded
-the same way. On a query the application embeds the question with Titan, retrieves the nearest chunks
-from Amazon S3 Vectors, then calls the Bedrock foundation model with those chunks as context. Adding
-documents later is fine, but changing `EMBEDDING_MODEL_ID` after the index exists forces a rebuild.
-The query always retrieves before it answers, so a correct answer comes from the documents.
+Both flows go through the same index and the same embedding model, Amazon Titan Text Embeddings v2.
+On a query the application embeds the question with Titan, retrieves the nearest chunks
+from Amazon S3 Vectors, then calls the Bedrock foundation model with those chunks as context.
+The query always retrieves before it answers ensuring a correct answer comes from the documents.
 
 This sample runs locally so the RAG mechanics stay visible. In a production application the same
-retrieve-and-generate logic can run on compute services such as AWS Lambda or within a
-container on Amazon EKS, behind an API and a web frontend.
+retrieve-and-generate logic may instead run on compute services such as AWS Lambda or Amazon ECS/EKS behind an API and a web frontend. 
 
 ### How It Works
 
