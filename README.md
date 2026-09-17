@@ -60,7 +60,7 @@ dashed line is the response.
 Both flows go through the same index and the same embedding model, Amazon Titan Text Embeddings v2.
 On a query the application embeds the question with Titan, retrieves the nearest chunks
 from Amazon S3 Vectors, then calls the Bedrock foundation model with those chunks as context.
-The query always retrieves before it answers ensuring a correct answer comes from the documents.
+The query always retrieves before it answers, so the response is grounded in the documents rather than the model's training.
 
 This sample runs locally so the RAG mechanics stay visible. In a production application the same
 retrieve-and-generate logic may instead run on compute services such as AWS Lambda or Amazon ECS/EKS behind an API and a web frontend. 
